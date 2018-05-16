@@ -1,0 +1,30 @@
+mat-card {
+    max-width: 500px;
+    margin: 2em auto;
+    text-align: center;
+  }
+
+  .example-full-width {
+    width: 90%;
+
+  }  
+
+.loading{
+  width: 125px;
+  height: 125px;
+  position: absolute;
+  top: 12px;
+  left: 195px;
+  margin: auto 0;
+}
+
+.seccion-picture{
+  position: relative;
+  text-align: center;
+}
+
+  @media only screen and (max-width: 600px) {
+    mat-card {
+      max-width: 100%;
+    }
+}

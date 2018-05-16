@@ -1,0 +1,37 @@
+<mat-card>
+  <mat-card-title>
+    <mat-toolbar color="primary">
+      Configuracion de cuenta
+    </mat-toolbar>
+  </mat-card-title>
+
+  <mat-card-content>
+    <br>
+    <br>
+    <br>
+    <div class="seccion-picture">
+      <img class="profilepic" src="{{ usuario.url_photo }}" alt="">
+      <div class="loading" style="background-color: rgba(255, 255, 255, 0.5);top: 0px; left: 187px;" *ngIf="(auth.uploadPercent | async ) && (auth.uploadPercent | async ) < 100"></div>
+      <mat-progress-spinner class="loading" mode="indeterminate" *ngIf="(auth.uploadPercent | async ) && (auth.uploadPercent | async ) < 100"></mat-progress-spinner>
+         
+    </div>
+    <input type="file" (change)="uploadFile($event)" /> 
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Modificar Nombre" [(ngModel)]="usuario.nombre">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Modificar Apellido" [(ngModel)]="usuario.apellido">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Modificar Telefono" [(ngModel)]="usuario.telefono">
+    </mat-form-field>
+      <br>
+      <br>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="actualizar()">Actualizar Datos</button>
+   
+  </mat-card-actions>
+  
+</mat-card>

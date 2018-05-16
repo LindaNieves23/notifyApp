@@ -1,0 +1,27 @@
+<mat-card>
+    <mat-card-title>    
+        <span class = "md-headline">Lista del contactos</span>          
+     </mat-card-title>
+     <mat-card-content>
+       <div *ngIf="dataSource?.length === 0"><span class = "md-headline">Lista de contacto vacia.</span></div>
+                  
+        <mat-table #table *ngIf="dataSource?.length > 0" [dataSource]="dataSource" >
+            <!-- Position Column -->
+         <ng-container matColumnDef="email">
+           <mat-header-cell *matHeaderCellDef> Correo </mat-header-cell>
+           <mat-cell *matCellDef="let usuario" (click)="modificar(usuario)"> {{usuario.email}} </mat-cell>
+         </ng-container>
+         <ng-container matColumnDef="nombre" >
+           <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+           <mat-cell *matCellDef="let usuario" (click)="modificar(usuario)"> {{usuario.nombre}} </mat-cell>
+         </ng-container>
+         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+     </mat-card-content>
+  
+</mat-card>
+
+<button class="custom-button" mat-fab color="primary" (click)="abrirDialogo()">
+  <mat-icon>add</mat-icon>
+</button>

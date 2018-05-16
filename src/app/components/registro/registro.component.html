@@ -1,0 +1,36 @@
+<mat-card>
+  <mat-card-title>
+      <mat-toolbar color="primary">
+          Crear Cuenta
+        </mat-toolbar>
+  </mat-card-title>
+  <mat-card-content>
+    <br><br><br>
+    <mat-form-field class="example-full-width">
+        <input matInput placeholder="Ingrese Nombre" [(ngModel)]="rusuario.nombre">
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+          <input matInput placeholder="Ingrese Apellidos" [(ngModel)]="rusuario.apellido">
+        </mat-form-field>        
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Ingrese Numero de telefono movil" [(ngModel)]="rusuario.telefono">
+          </mat-form-field>
+<mat-form-field class="example-full-width">
+  <input matInput placeholder="Ingrese Email" [(ngModel)]="rusuario.email">
+</mat-form-field>
+<mat-form-field class="example-full-width">
+  <input type="password" matInput placeholder="Ingrese Password" [(ngModel)]="rusuario.pass">
+</mat-form-field>
+<mat-form-field class="example-full-width">
+    <input type="password" matInput placeholder="Ingrese Password nuevamente">
+  </mat-form-field>
+  <mat-checkbox><a href="#">Acepto las politicas y Condiciones de datos.</a>  </mat-checkbox>
+  <br><br>
+</mat-card-content>
+<mat-card-actions>
+  <button mat-raised-button color="primary" (click)="registrar()" [disabled]="!rusuario.email || !rusuario.pass || !rusuario.nombre || !rusuario.apellido || !rusuario.telefono">Crear Cuenta</button><button mat-button (click)="goBack()">Cancelar</button>
+</mat-card-actions>
+<mat-card-footer>
+
+</mat-card-footer>
+</mat-card>

@@ -1,0 +1,40 @@
+<mat-sidenav-container class="example-container">
+  <mat-sidenav #sidenav [mode]="mode">
+    <div class="seccion-profile">
+      <img class="profilepic" src="{{ (auth.usuario | async)?.url_photo }}" alt="">
+      <span class="principal">{{ (auth.usuario | async)?.nombre }} {{ (auth.usuario | async)?.apellido }}</span>
+      
+      <span class="secundario">{{ (auth.usuario | async)?.email }}</span>
+      <br>
+      
+    </div>
+    <div class="seccion-botones">
+      <mat-divider></mat-divider>
+      <button class="opciones-conf" mat-button [routerLink]="['/principal', { outlets: { mainoutler: ['admin'] } }]"><mat-icon>search</mat-icon>Administrar Contactos</button>
+      <button class="opciones-conf" mat-button [routerLink]="['/principal', { outlets: { mainoutler: ['configurar'] } }]"><mat-icon>settings</mat-icon>Configuracion</button>
+      <mat-divider></mat-divider>
+      <button class="opciones-conf" mat-button (click)="cerrarSesion()"><mat-icon>exit_to_app</mat-icon>Salir</button>
+    </div>
+     
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>dehaze</mat-icon>
+      </button>
+      <span class="titulo">Bienvenido {{ (auth.usuario | async)?.nombre }}</span>
+      <button *ngIf="auth.usuario | async"  mat-icon-button [mat-menu-trigger-for]="menu">
+        <mat-icon>more_vert</mat-icon> 
+      </button>    
+    </mat-toolbar>
+    <mat-menu x-position="before" #menu="matMenu">
+      <button mat-menu-item [matMenuTriggerFor]="subMenu"><mat-icon>notifications</mat-icon> Notificaciones ( {{(auth.usuario | async)?.notificacion.length}} ) </button>
+      <button mat-menu-item (click)="cerrarSesion()"><mat-icon>exit_to_app</mat-icon>Cerrar Sesion</button>    
+    </mat-menu>
+    <mat-menu x-position="before" #subMenu="matMenu">
+      <button mat-menu-item *ngFor="let u of (auth.usuario | async)?.notificacion"> {{ u.nombre }} : {{ u.email }} </button>
+      <button mat-menu-item *ngIf="(auth.usuario | async)?.notificacion.length === 0">No tienes notificaciones</button>
+    </mat-menu>
+    <router-outlet name="mainoutler"></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

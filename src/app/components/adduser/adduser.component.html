@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>Informacion del contacto</h2>
+<mat-dialog-content class="dialogo-control">
+  <mat-form-field class="example-full-width">
+    <input [(ngModel)]="rusuario.email" matInput placeholder="Ingrese Email">
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <input [(ngModel)]="rusuario.nombre" matInput placeholder="Ingrese nombres">
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button (click)="save()">
+            <mat-icon>save</mat-icon>
+    </button>
+    <button *ngIf="data.modificar" (click)="eliminar()"><mat-icon>delete_sweep</mat-icon></button>
+    <button *ngIf="data.modificar" (click)="notify()"><mat-icon>notifications</mat-icon></button> 
+    <button (click)="close()">
+            <mat-icon>clear</mat-icon>
+    </button>
+</mat-dialog-actions>
