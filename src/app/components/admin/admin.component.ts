@@ -24,6 +24,7 @@ export class AdminComponent implements OnInit {
     this.auth.usuario.subscribe(u => this.cargarUsuario(u));
     // this.dataSource = this.usuarioActual.contactos;
   }
+
   modificar(usuario) {
     const dialogRef = this.dialog.open(AdduserComponent, {
       width: '350px',

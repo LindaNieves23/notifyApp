@@ -17,6 +17,7 @@ import { AdminComponent } from './components/admin/admin.component';
 import { AdduserComponent } from './components/adduser/adduser.component';
 import { ConfiguracionComponent } from './components/configuracion/configuracion.component';
 import { AngularFireStorageModule } from 'angularfire2/storage';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -30,7 +31,7 @@ import { AngularFireStorageModule } from 'angularfire2/storage';
     ConfiguracionComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule, HttpModule, HttpClientModule,
     FormsModule,
     HttpModule,
     BrowserAnimationsModule,

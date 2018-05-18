@@ -9,7 +9,7 @@
 </mat-dialog-content>
 
 <mat-dialog-actions>
-    <button (click)="save()">
+    <button (click)="save()" [disabled]="!rusuario.email || !rusuario.nombre" >
             <mat-icon>save</mat-icon>
     </button>
     <button *ngIf="data.modificar" (click)="eliminar()"><mat-icon>delete_sweep</mat-icon></button>

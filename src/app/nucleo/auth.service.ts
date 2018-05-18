@@ -6,9 +6,9 @@ import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
 import { Usuario } from '../models/usuario';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from 'angularfire2/storage';
-
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable()
 export class AuthService {
 
@@ -21,7 +21,7 @@ export class AuthService {
   constructor(private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
     private router: Router, public snackBar: MatSnackBar,
-    private storage: AngularFireStorage) {
+    private storage: AngularFireStorage, private http: HttpClient) {
 
     //// Get auth data, then get firestore user document || null
     this.usuario = this.afAuth.authState
@@ -49,40 +49,50 @@ export class AuthService {
     let flag: boolean;
     flag = true;
     this.afs.collection<Usuario>('contactos', ref => ref.where('email', '==', u.email))
-    .valueChanges().subscribe(r => {
-      if (r.length === 0) {
-        this.enviarEmail();
-      } else if (flag) {
-       flag = false;
-       r[0].notificacion.push({nombre: fromuser.nombre, email: fromuser.email});
-       let lista;
-       lista = r[0].notificacion;
-       this.updateUser(r[0], {notificacion: lista});
-       console.log(lista);
-      }
-    });
+      .valueChanges().subscribe(r => {
+        if (r.length === 0) {
+          this.enviarEmail(u, fromuser);
+        } else if (flag) {
+          flag = false;
+          r[0].notificacion.push({ nombre: fromuser.nombre, email: fromuser.email, url_photo: fromuser.url_photo });
+          let lista;
+          lista = r[0].notificacion;
+          this.updateUser(r[0], { notificacion: lista });
+          console.log(lista);
+        }
+      });
   }
 
-/*  notificarUpdate() {
-    if (r.length === 0) {
-      this.enviarEmail();
-    } else {
-     r[0].notificacion.push({nombre: fromuser.nombre, email: fromuser.email});
-     return this.updateUser(r[0], {notificacion: r[0].notificacion});
-    }
-  } */
+  /*  notificarUpdate() {
+      if (r.length === 0) {
+        this.enviarEmail();
+      } else {
+       r[0].notificacion.push({nombre: fromuser.nombre, email: fromuser.email});
+       return this.updateUser(r[0], {notificacion: r[0].notificacion});
+      }
+    } */
 
-  enviarEmail() {
+  enviarEmail(to: Usuario, from: Usuario) {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
+    const endpoint = 'https://us-central1-notifyapp-4eb9a.cloudfunctions.net/sendEmailCF';
     console.log('Se envia el email');
+    // https://us-central1-notifyapp-4eb9a.cloudfunctions.net/httpEmail
+    const msg = {
+      email: to.email,
+      asunto: 'Nueva notificacion',
+      nombre: 'Notificacion de ' + from.nombre,
+      msj: 'Tienes una notificacion de un amigo',
+    };
+    this.http.post(endpoint, msg, {headers: headers}).subscribe();
   }
   emailSignUp(u: Usuario) {
     return this.afAuth.auth.createUserWithEmailAndPassword(u.email, u.pass)
       .then(userfs => {
         u.uid = userfs.uid;
-        this.router.navigate(['/principal' , { outlets: { mainoutler: ['admin'] } }]);
+        this.router.navigate(['/principal', { outlets: { mainoutler: ['admin'] } }]);
         return this.crearUsuario(u);
       })
-      .catch(error => this.handleError(error) );
+      .catch(error => this.handleError(error));
   }
 
   private crearUsuario(usuario) {
@@ -122,8 +132,8 @@ export class AuthService {
   /// Additional useful methods, not used in video
   emailLogin(email: string, password: string) {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
-    .then(r => this.router.navigate(['/principal' , { outlets: { mainoutler: ['admin'] } }]))
-      .catch(error => this.handleError(error) );
+      .then(r => this.router.navigate(['/principal', { outlets: { mainoutler: ['admin'] } }]))
+      .catch(error => this.handleError(error));
   }
 
   // Sends email allowing user to reset password
@@ -132,13 +142,13 @@ export class AuthService {
 
     return fbAuth.sendPasswordResetEmail(email)
       .then(() => console.log('Password update email sent'))
-      .catch((error) => this.handleError(error) );
+      .catch((error) => this.handleError(error));
   }
 
 
   signOut() {
     this.afAuth.auth.signOut().then(() => {
-        this.router.navigate(['/']);
+      this.router.navigate(['/']);
     });
   }
 
